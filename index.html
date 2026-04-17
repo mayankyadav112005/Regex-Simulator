@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="A powerful Regular Expression Simulator Tool — build, test, generate strings, convert regex to finite automata, and check equivalence of regex patterns interactively.">
+    <title>Regex Simulator Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Animated background orbs -->
+    <div class="bg-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <header class="app-header" id="app-header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">⟨.*⟩</span>
+                <h1>Regex Simulator</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" id="main-content">
+        <!-- ═══════════════════════════════════════ -->
+        <!-- SECTION 1: Regex Builder                -->
+        <!-- ═══════════════════════════════════════ -->
+        <section class="card card-builder" id="regex-builder-section">
+            <div class="card-header">
+                <span class="card-icon">🔧</span>
+                <h2>Regex Builder</h2>
+            </div>
+
+            <div class="card-body">
+                <!-- Input row -->
+                <div class="input-group" id="regex-input-group">
+                    <label for="regex-input" class="sr-only">Regular Expression</label>
+                    <input type="text" id="regex-input" class="regex-input" placeholder="Enter regex (e.g., (a+b)*abb)"
+                        autocomplete="off" spellcheck="false">
+                    <button id="btn-clear" class="btn btn-icon" title="Clear input" aria-label="Clear input">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Main Regex Display -->
+                <div class="main-regex-display" id="main-regex-display">
+                    <span class="regex-label">Main Regex:</span>
+                    <span class="regex-value" id="main-regex-value">—</span>
+                </div>
+
+                <!-- Palette -->
+                <div class="palette" id="regex-palette">
+                    <span class="palette-label">Symbols</span>
+                    <div class="palette-group">
+                        <button class="palette-btn" data-symbol="a">a</button>
+                        <button class="palette-btn" data-symbol="b">b</button>
+                        <button class="palette-btn" data-symbol="0">0</button>
+                        <button class="palette-btn" data-symbol="1">1</button>
+                    </div>
+                    <span class="palette-label">Operators</span>
+                    <div class="palette-group">
+                        <button class="palette-btn op" data-symbol="+">+</button>
+                        <button class="palette-btn op" data-symbol="*">*</button>
+                        <button class="palette-btn op" data-symbol=".">.</button>
+                        <button class="palette-btn op" data-symbol="|">|</button>
+                        <button class="palette-btn op" data-symbol="(">(</button>
+                        <button class="palette-btn op" data-symbol=")">)</button>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="action-row">
+                    <button id="btn-generate" class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 3 21 3 21 8" />
+                            <line x1="4" y1="20" x2="21" y2="3" />
+                            <polyline points="21 16 21 21 16 21" />
+                            <line x1="15" y1="15" x2="21" y2="21" />
+                            <line x1="4" y1="4" x2="9" y2="9" />
+                        </svg>
+                        Generate Strings
+                    </button>
+                    <button id="btn-convert-fa" class="btn btn-accent">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="5" cy="12" r="3"/>
+                            <circle cx="19" cy="12" r="3"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                            <polyline points="13 9 16 12 13 15"/>
+                        </svg>
+                        Convert to FA
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- SECTION: Test String                     -->
+        <!-- ═══════════════════════════════════════ -->
+        <section class="card card-test" id="test-string-section">
+            <div class="card-header">
+                <span class="card-icon">🧪</span>
+                <h2>Test String</h2>
+            </div>
+
+            <div class="card-body">
+                <p class="section-desc">Check if a specific string is accepted by the main regex.</p>
+                <div class="input-group" id="test-input-group">
+                    <label for="test-input">String</label>
+                    <input type="text" id="test-input" class="regex-input" placeholder="e.g., abb"
+                        autocomplete="off" spellcheck="false">
+                </div>
+
+                <div class="action-row">
+                    <button id="btn-test-string" class="btn btn-test">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 11 12 14 22 4"/>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                        </svg>
+                        Test String
+                    </button>
+                </div>
+
+                <!-- Test Result -->
+                <div class="test-result hidden" id="test-result">
+                    <div class="result-badge" id="test-result-badge"></div>
+                    <p class="result-detail" id="test-result-detail"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- SECTION 2: Generated Strings Output     -->
+        <!-- ═══════════════════════════════════════ -->
+        <section class="card card-output" id="generated-strings-section">
+            <div class="card-header">
+                <span class="card-icon">📜</span>
+                <h2>Generated Strings</h2>
+                <span class="badge" id="string-count">0</span>
+            </div>
+
+            <div class="card-body">
+                <div class="output-box" id="output-box">
+                    <p class="placeholder-msg" id="output-placeholder">Generated strings will appear here…</p>
+                    <ul class="string-list" id="string-list"></ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- SECTION: Finite Automata Visualization  -->
+        <!-- ═══════════════════════════════════════ -->
+        <section class="card card-automata" id="automata-section">
+            <div class="card-header">
+                <span class="card-icon">🔀</span>
+                <h2>Finite Automata</h2>
+                <span class="badge badge-info" id="fa-type-badge">NFA</span>
+            </div>
+
+            <div class="card-body">
+                <!-- Transition Table -->
+                <div class="fa-table-container" id="fa-table-container">
+                    <p class="placeholder-msg" id="fa-placeholder">Convert a regex to see the automata here…</p>
+                    <div class="fa-table-wrap hidden" id="fa-table-wrap">
+                        <h3 class="fa-sub-heading">Transition Table</h3>
+                        <div class="table-scroll">
+                            <table class="fa-table" id="fa-table">
+                                <thead id="fa-table-head"></thead>
+                                <tbody id="fa-table-body"></tbody>
+                            </table>
+                        </div>
+                        <div class="fa-legend">
+                            <span class="legend-item"><span class="legend-dot start-dot"></span> Start State</span>
+                            <span class="legend-item"><span class="legend-dot accept-dot"></span> Accept State</span>
+                            <span class="legend-item"><span class="legend-dot normal-dot"></span> Normal State</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Graph -->
+                <div class="fa-graph-container hidden" id="fa-graph-container">
+                    <h3 class="fa-sub-heading">State Diagram</h3>
+                    <div class="fa-canvas-wrap">
+                        <svg id="fa-canvas" class="fa-canvas" xmlns="http://www.w3.org/2000/svg"></svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- SECTION 3: Equivalence Checker          -->
+        <!-- ═══════════════════════════════════════ -->
+        <section class="card card-equiv" id="equivalence-checker-section">
+            <div class="card-header">
+                <span class="card-icon">⚖️</span>
+                <h2>Equivalence Checker</h2>
+            </div>
+
+            <div class="card-body">
+                <div class="equiv-inputs">
+                    <div class="input-group" id="regex1-group">
+                        <label for="regex1-input">Regex 1</label>
+                        <input type="text" id="regex1-input" class="regex-input" placeholder="e.g., (a+b)*a"
+                            autocomplete="off" spellcheck="false">
+                    </div>
+                    <div class="vs-badge">VS</div>
+                    <div class="input-group" id="regex2-group">
+                        <label for="regex2-input">Regex 2</label>
+                        <input type="text" id="regex2-input" class="regex-input" placeholder="e.g., (a+b)*a"
+                            autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <button id="btn-equiv" class="btn btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 3h5v5" />
+                            <path d="M8 3H3v5" />
+                            <path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3" />
+                            <path d="m15 9 6-6" />
+                        </svg>
+                        Check Equivalence
+                    </button>
+                </div>
+
+                <!-- Result area -->
+                <div class="equiv-result hidden" id="equiv-result">
+                    <div class="result-badge" id="result-badge"></div>
+                    <p class="result-detail" id="result-detail"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer" id="app-footer">
+        <p>Regex Simulator Tool &mdash; Built with ❤️ using Vanilla JS</p>
+    </footer>
+
+    <!-- Toast container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
